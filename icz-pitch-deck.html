@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICZ Website-Vorschlag — Mindel Michel</title>
+
+    <!-- === FONTS: Manrope from Google Fonts === -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES (THEME)
+           ICZ brand blues + Swiss Precision layout
+           =========================================== */
+        :root {
+            /* ICZ Brand Colors */
+            --blue-dark: #00407c;
+            --blue-mid: #0070b4;
+            --blue-light: #59a5d8;
+            --blue-pale: #acd2ec;
+            --blue-wash: #e8f2fa;
+
+            /* Neutrals */
+            --bg-primary: #fafafa;
+            --bg-dark: #0a1628;
+            --text-primary: #0a0a0a;
+            --text-secondary: #555;
+            --text-muted: #999;
+            --white: #ffffff;
+
+            /* Typography — MUST use clamp() */
+            --font-display: 'Manrope', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --title-size: clamp(2rem, 5.5vw, 4.5rem);
+            --h2-size: clamp(1.4rem, 3.5vw, 2.8rem);
+            --h3-size: clamp(1rem, 2vw, 1.4rem);
+            --body-size: clamp(0.8rem, 1.3vw, 1.05rem);
+            --small-size: clamp(0.7rem, 0.95vw, 0.85rem);
+            --label-size: clamp(0.6rem, 0.8vw, 0.72rem);
+
+            /* Spacing — MUST use clamp() */
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(0.8rem, 2vw, 2rem);
+            --element-gap: clamp(0.3rem, 1vw, 1rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.6s;
+        }
+
+        /* ===========================================
+           RESET & BASE
+           =========================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===========================================
+           VIEWPORT FITTING: MANDATORY BASE STYLES
+           =========================================== */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            font-family: var(--font-body);
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+        }
+
+        .card, .container, .content-box {
+            max-width: min(90vw, 1000px);
+            max-height: min(80vh, 700px);
+        }
+
+        .feature-list, .bullet-list {
+            gap: clamp(0.4rem, 1vh, 1rem);
+        }
+
+        .feature-list li, .bullet-list li {
+            font-size: var(--body-size);
+            line-height: 1.4;
+        }
+
+        img, .image-container {
+            max-width: 100%;
+            max-height: min(50vh, 400px);
+            object-fit: contain;
+        }
+
+        /* Short viewports */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.5rem, 4.5vw, 2.8rem);
+                --h2-size: clamp(1.2rem, 3vw, 2rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+                --title-size: clamp(1.2rem, 4vw, 2rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            }
+            .nav-dots, .keyboard-hint, .decorative { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===========================================
+           GRID BACKGROUND (Swiss Precision motif)
+           =========================================== */
+        .grid-bg::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+            background-size: clamp(30px, 4vw, 50px) clamp(30px, 4vw, 50px);
+            pointer-events: none;
+        }
+
+        .dark-grid-bg::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: clamp(30px, 4vw, 50px) clamp(30px, 4vw, 50px);
+            pointer-events: none;
+        }
+
+        /* ===========================================
+           ACCENT BAR (recurring motif)
+           =========================================== */
+        .accent-bar {
+            position: absolute;
+            width: clamp(3px, 0.4vw, 5px);
+            background: var(--blue-mid);
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal,
+        .slide.visible .reveal-left,
+        .slide.visible .reveal-scale {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        .slide.visible .reveal:nth-child(1) { transition-delay: 0.1s; }
+        .slide.visible .reveal:nth-child(2) { transition-delay: 0.2s; }
+        .slide.visible .reveal:nth-child(3) { transition-delay: 0.3s; }
+        .slide.visible .reveal:nth-child(4) { transition-delay: 0.4s; }
+        .slide.visible .reveal:nth-child(5) { transition-delay: 0.5s; }
+        .slide.visible .reveal:nth-child(6) { transition-delay: 0.6s; }
+
+        .stagger-1 { transition-delay: 0.1s !important; }
+        .stagger-2 { transition-delay: 0.2s !important; }
+        .stagger-3 { transition-delay: 0.3s !important; }
+        .stagger-4 { transition-delay: 0.4s !important; }
+        .stagger-5 { transition-delay: 0.5s !important; }
+        .stagger-6 { transition-delay: 0.6s !important; }
+        .stagger-7 { transition-delay: 0.7s !important; }
+        .stagger-8 { transition-delay: 0.8s !important; }
+
+        /* Bar grow animation */
+        @keyframes barGrow {
+            from { height: 0; }
+            to { height: var(--bar-height, 35vh); }
+        }
+
+        /* ===========================================
+           SHARED ELEMENTS
+           =========================================== */
+        .slide-label {
+            font-family: var(--font-display);
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--blue-mid);
+        }
+
+        .slide-label-light {
+            color: var(--blue-light);
+        }
+
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .slide-number-light {
+            color: rgba(255,255,255,0.25);
+        }
+
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: clamp(0.8rem, 1.5vw, 1.5rem) var(--slide-padding);
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .slide-footer-dark {
+            color: rgba(255,255,255,0.2);
+        }
+
+        /* ===========================================
+           PROGRESS BAR
+           =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue-dark), var(--blue-light));
+            z-index: 9999;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.8rem, 1.5vw, 1.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 0.8vh, 10px);
+            z-index: 9998;
+        }
+
+        .nav-dot {
+            width: clamp(6px, 0.5vw, 8px);
+            height: clamp(6px, 0.5vw, 8px);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--blue-mid);
+            transform: scale(1.4);
+        }
+
+        .nav-dot.light {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .nav-dot.light.active {
+            background: var(--blue-light);
+        }
+
+        /* ===========================================
+           SLIDE 1: TITLE
+           =========================================== */
+        .title-slide {
+            background: var(--bg-primary);
+        }
+
+        .title-slide .accent-bar {
+            top: 0;
+            left: clamp(3rem, 8vw, 8rem);
+            --bar-height: 38vh;
+            height: 0;
+            animation: barGrow 0.8s var(--ease-out-expo) 0.3s both;
+        }
+
+        .title-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(5rem, 12vw, 12rem);
+        }
+
+        .title-content .slide-label {
+            margin-bottom: clamp(0.5rem, 1.5vw, 1.5rem);
+        }
+
+        .title-content h1 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--title-size);
+            line-height: 1.0;
+            color: var(--text-primary);
+            letter-spacing: -0.03em;
+            max-width: 14ch;
+        }
+
+        .title-content h1 span {
+            color: var(--blue-mid);
+        }
+
+        .title-content .subtitle {
+            font-family: var(--font-body);
+            font-weight: 400;
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            margin-top: clamp(0.8rem, 1.5vw, 1.5rem);
+            max-width: 42ch;
+            line-height: 1.65;
+        }
+
+        /* Geometric circle — Swiss motif */
+        .geo-circle {
+            position: absolute;
+            right: clamp(3rem, 10vw, 10rem);
+            top: 50%;
+            transform: translateY(-50%);
+            width: clamp(100px, 18vw, 260px);
+            height: clamp(100px, 18vw, 260px);
+            border: clamp(2px, 0.25vw, 3px) solid var(--blue-dark);
+            border-radius: 50%;
+            opacity: 0;
+            animation: circleIn 0.8s var(--ease-out-expo) 0.6s both;
+        }
+
+        .geo-circle::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 35%;
+            height: clamp(2px, 0.25vw, 3px);
+            background: var(--blue-mid);
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes circleIn {
+            from { opacity: 0; transform: translateY(-50%) scale(0.8); }
+            to { opacity: 1; transform: translateY(-50%) scale(1); }
+        }
+
+        /* ===========================================
+           SLIDE 2: ÜBER MICH
+           =========================================== */
+        .about-slide {
+            background: var(--bg-primary);
+        }
+
+        .about-slide .accent-bar {
+            top: 0;
+            left: clamp(3rem, 8vw, 8rem);
+            --bar-height: 100vh;
+            height: 0;
+        }
+
+        .about-slide.visible .accent-bar {
+            animation: barGrow 1s var(--ease-out-expo) 0.2s both;
+        }
+
+        .about-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(5rem, 12vw, 12rem);
+            gap: clamp(2rem, 5vw, 5rem);
+        }
+
+        .about-left {
+            flex: 1;
+        }
+
+        .about-left h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(0.8rem, 1.5vw, 1.5rem);
+        }
+
+        .about-left h2 span { color: var(--blue-mid); }
+
+        .about-points {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 1vh, 0.9rem);
+        }
+
+        .about-points li {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            line-height: 1.55;
+            padding-left: clamp(1rem, 1.5vw, 1.5rem);
+            position: relative;
+        }
+
+        .about-points li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: clamp(0.4rem, 0.7vw, 0.55rem);
+            width: clamp(5px, 0.5vw, 7px);
+            height: clamp(5px, 0.5vw, 7px);
+            background: var(--blue-mid);
+            border-radius: 50%;
+        }
+
+        .about-right {
+            flex: 0.6;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.6rem, 1vw, 1rem);
+        }
+
+        .stat-card {
+            background: var(--blue-wash);
+            border-radius: clamp(6px, 0.8vw, 12px);
+            padding: clamp(0.8rem, 1.5vw, 1.5rem);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            color: var(--blue-dark);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: var(--small-size);
+            color: var(--blue-mid);
+            font-weight: 600;
+            margin-top: clamp(0.2rem, 0.3vw, 0.4rem);
+        }
+
+        /* ===========================================
+           SLIDE 3: DIE VISION (dark slide)
+           =========================================== */
+        .vision-slide {
+            background: var(--bg-dark);
+        }
+
+        .vision-slide::after {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse at 70% 30%, rgba(0, 112, 180, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(89, 165, 216, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .vision-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(3rem, 8vw, 8rem);
+            padding-right: clamp(3rem, 8vw, 8rem);
+            position: relative;
+            z-index: 1;
+        }
+
+        .vision-quote {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: clamp(1.3rem, 3vw, 2.4rem);
+            color: var(--white);
+            line-height: 1.4;
+            max-width: 22ch;
+            margin-bottom: clamp(1rem, 2vw, 2rem);
+        }
+
+        .vision-quote em {
+            font-style: normal;
+            color: var(--blue-light);
+            font-weight: 700;
+        }
+
+        .vision-attribution {
+            font-size: var(--body-size);
+            color: rgba(255,255,255,0.55);
+            font-weight: 400;
+        }
+
+        .vision-attribution strong {
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+        }
+
+        .vision-context {
+            font-size: var(--body-size);
+            color: rgba(255,255,255,0.55);
+            margin-top: clamp(1.5rem, 3vw, 3rem);
+            max-width: 50ch;
+            line-height: 1.6;
+        }
+
+        /* Decorative quotation mark */
+        .quote-mark {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 10vw, 10rem);
+            font-weight: 800;
+            color: rgba(89, 165, 216, 0.08);
+            position: absolute;
+            top: clamp(1rem, 5vw, 5rem);
+            left: clamp(2rem, 6vw, 6rem);
+            line-height: 1;
+            z-index: 0;
+        }
+
+        /* ===========================================
+           SLIDE 4: DAS PROBLEM
+           =========================================== */
+        .problem-slide {
+            background: var(--bg-primary);
+        }
+
+        .problem-slide .accent-bar {
+            top: 0;
+            right: clamp(3rem, 8vw, 8rem);
+            left: auto;
+            --bar-height: 100vh;
+            height: 0;
+            background: #d4433b;
+        }
+
+        .problem-slide.visible .accent-bar {
+            animation: barGrow 1s var(--ease-out-expo) 0.2s both;
+        }
+
+        .problem-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(3rem, 8vw, 8rem);
+            padding-right: clamp(6rem, 14vw, 14rem);
+            gap: clamp(2rem, 4vw, 4rem);
+        }
+
+        .problem-left {
+            flex: 1;
+        }
+
+        .problem-left h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(1rem, 2vw, 2rem);
+        }
+
+        .problem-left h2 span { color: #d4433b; }
+
+        .problem-items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.6rem, 1.2vh, 1rem);
+        }
+
+        .problem-items li {
+            display: flex;
+            align-items: flex-start;
+            gap: clamp(0.5rem, 1vw, 0.8rem);
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .problem-icon {
+            flex-shrink: 0;
+            width: clamp(18px, 1.8vw, 24px);
+            height: clamp(18px, 1.8vw, 24px);
+            background: #fde8e7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(0.5rem, 0.8vw, 0.7rem);
+            color: #d4433b;
+            margin-top: clamp(1px, 0.2vw, 3px);
+        }
+
+        /* ===========================================
+           SLIDE 5: PERSONAS (Speech bubbles)
+           =========================================== */
+        .persona-slide {
+            background: var(--bg-primary);
+        }
+
+        .persona-slide .accent-bar {
+            top: 0;
+            left: clamp(3rem, 8vw, 8rem);
+            --bar-height: 100vh;
+            height: 0;
+        }
+
+        .persona-slide.visible .accent-bar {
+            animation: barGrow 1s var(--ease-out-expo) 0.2s both;
+        }
+
+        .persona-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(5rem, 12vw, 12rem);
+            gap: clamp(2rem, 4vw, 4rem);
+        }
+
+        .persona-left {
+            flex: 0.4;
+        }
+
+        .persona-left h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        .persona-left h2 span { color: var(--blue-mid); }
+
+        .persona-left-desc {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 28ch;
+        }
+
+        .persona-right {
+            flex: 0.6;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 0.8vw, 0.8rem);
+        }
+
+        .persona-bubble {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: clamp(12px, 1.2vw, 16px);
+            padding: clamp(0.7rem, 1.2vw, 1.1rem) clamp(0.9rem, 1.4vw, 1.4rem);
+            display: flex;
+            align-items: center;
+            gap: clamp(0.6rem, 1vw, 1rem);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+        .persona-tag {
+            flex-shrink: 0;
+            font-size: clamp(0.55rem, 0.7vw, 0.65rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: clamp(3px, 0.3vw, 5px) clamp(6px, 0.6vw, 10px);
+            border-radius: clamp(4px, 0.4vw, 6px);
+            white-space: nowrap;
+        }
+
+        .tag-youth    { background: #e8f2fa; color: var(--blue-dark); }
+        .tag-family   { background: #e8f5e9; color: #2d7d46; }
+        .tag-elder    { background: #fef3e2; color: #8b5e3c; }
+        .tag-religion { background: #f3e8ff; color: #6b3fa0; }
+        .tag-new      { background: #e0f2f1; color: #00695c; }
+
+        .persona-question {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: clamp(0.72rem, 1.05vw, 0.9rem);
+            color: var(--text-primary);
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        /* ===========================================
+           SLIDE 6: WAS MUSS SICH ÄNDERN
+           =========================================== */
+        .change-slide {
+            background: var(--bg-primary);
+        }
+
+        .change-slide .accent-bar {
+            top: 0;
+            left: clamp(3rem, 8vw, 8rem);
+            --bar-height: 100vh;
+            height: 0;
+        }
+
+        .change-slide.visible .accent-bar {
+            animation: barGrow 1s var(--ease-out-expo) 0.2s both;
+        }
+
+        .change-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(5rem, 12vw, 12rem);
+        }
+
+        .change-content h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(1rem, 2vw, 2rem);
+        }
+
+        .change-content h2 span { color: var(--blue-mid); }
+
+        .change-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(0.6rem, 1.2vw, 1.2rem);
+            max-width: min(85vw, 800px);
+        }
+
+        .change-card {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: clamp(8px, 1vw, 12px);
+            padding: clamp(0.8rem, 1.5vw, 1.5rem);
+            border-left: clamp(3px, 0.3vw, 4px) solid var(--blue-mid);
+        }
+
+        .change-card-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--h3-size);
+            color: var(--text-primary);
+            margin-bottom: clamp(0.2rem, 0.4vw, 0.4rem);
+        }
+
+        .change-card-text {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        /* ===========================================
+           SLIDE 7: DIE LÖSUNG (dark)
+           =========================================== */
+        .solution-slide {
+            background: var(--blue-dark);
+        }
+
+        .solution-slide::after {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 50%, rgba(0, 112, 180, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(89, 165, 216, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .solution-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(5rem, 12vw, 12rem);
+            gap: clamp(2rem, 5vw, 5rem);
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-left {
+            flex: 1;
+        }
+
+        .solution-left h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--white);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(0.8rem, 1.5vw, 1.5rem);
+        }
+
+        .solution-left h2 span { color: var(--blue-light); }
+
+        .solution-desc {
+            font-size: var(--body-size);
+            color: rgba(255,255,255,0.7);
+            line-height: 1.65;
+            max-width: 40ch;
+        }
+
+        .solution-right {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        .solution-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: clamp(6px, 0.8vw, 10px);
+            padding: clamp(0.6rem, 1vw, 1rem) clamp(0.8rem, 1.5vw, 1.5rem);
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1vw, 0.8rem);
+        }
+
+        .solution-pill-icon {
+            width: clamp(28px, 2.5vw, 36px);
+            height: clamp(28px, 2.5vw, 36px);
+            background: rgba(89, 165, 216, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--blue-light);
+            padding: clamp(5px, 0.5vw, 8px);
+        }
+
+        .solution-pill-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .solution-pill-text {
+            font-size: var(--body-size);
+            color: rgba(255,255,255,0.85);
+            font-weight: 500;
+        }
+
+        /* Accent bar for solution slide */
+        .solution-slide .accent-bar {
+            top: 0;
+            left: clamp(3rem, 8vw, 8rem);
+            --bar-height: 100vh;
+            background: var(--blue-light);
+            height: 0;
+        }
+
+        .solution-slide.visible .accent-bar {
+            animation: barGrow 1s var(--ease-out-expo) 0.2s both;
+        }
+
+        /* ===========================================
+           SLIDE 8: SCHLÜSSELFUNKTIONEN
+           =========================================== */
+        .features-slide {
+            background: var(--bg-primary);
+        }
+
+        .features-slide .accent-bar {
+            top: 0;
+            left: clamp(3rem, 8vw, 8rem);
+            --bar-height: 100vh;
+            height: 0;
+        }
+
+        .features-slide.visible .accent-bar {
+            animation: barGrow 1s var(--ease-out-expo) 0.2s both;
+        }
+
+        .features-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(5rem, 12vw, 12rem);
+        }
+
+        .features-content h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(1rem, 2vw, 2rem);
+        }
+
+        .features-content h2 span { color: var(--blue-mid); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.5rem, 1vw, 1rem);
+            max-width: min(90vw, 900px);
+        }
+
+        .feature-card {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: clamp(10px, 1vw, 12px);
+            padding: clamp(0.9rem, 1.4vw, 1.4rem);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .feature-icon {
+            width: clamp(28px, 2.5vw, 36px);
+            height: clamp(28px, 2.5vw, 36px);
+            margin-bottom: clamp(0.4rem, 0.6vw, 0.6rem);
+            color: var(--blue-mid);
+        }
+
+        .feature-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(0.7rem, 1vw, 0.9rem);
+            color: var(--text-primary);
+            margin-bottom: clamp(0.2rem, 0.3vw, 0.3rem);
+        }
+
+        .feature-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ===========================================
+           SLIDE 9: MEIN ANSATZ
+           =========================================== */
+        .approach-slide {
+            background: var(--bg-primary);
+        }
+
+        .approach-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(3rem, 8vw, 8rem);
+        }
+
+        .approach-content h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(1.2rem, 2.5vw, 2.5rem);
+        }
+
+        .approach-content h2 span { color: var(--blue-mid); }
+
+        .approach-steps {
+            display: flex;
+            gap: clamp(0.6rem, 1.5vw, 1.5rem);
+            max-width: min(90vw, 950px);
+        }
+
+        .approach-step {
+            flex: 1;
+            position: relative;
+            padding-top: clamp(1.5rem, 2.5vw, 2.5rem);
+        }
+
+        .approach-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: clamp(2px, 0.25vw, 3px);
+            background: var(--blue-pale);
+            border-radius: 2px;
+        }
+
+        .step-number {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            color: var(--blue-pale);
+            line-height: 1;
+            margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);
+        }
+
+        .step-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(0.75rem, 1.1vw, 1rem);
+            color: var(--text-primary);
+            margin-bottom: clamp(0.2rem, 0.4vw, 0.4rem);
+        }
+
+        .step-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        /* ===========================================
+           SLIDE 10: EINFACH ZU PFLEGEN (ease of use)
+           =========================================== */
+        .cms-slide {
+            background: var(--bg-primary);
+        }
+
+        .cms-slide .accent-bar {
+            top: 0;
+            left: clamp(3rem, 8vw, 8rem);
+            --bar-height: 100vh;
+            height: 0;
+        }
+
+        .cms-slide.visible .accent-bar {
+            animation: barGrow 1s var(--ease-out-expo) 0.2s both;
+        }
+
+        .cms-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: var(--slide-padding);
+            padding-left: clamp(5rem, 12vw, 12rem);
+            gap: clamp(2rem, 5vw, 5rem);
+        }
+
+        .cms-left {
+            flex: 1;
+        }
+
+        .cms-left h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h2-size);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(0.8rem, 1.5vw, 1.5rem);
+        }
+
+        .cms-left h2 span { color: var(--blue-mid); }
+
+        .cms-desc {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 40ch;
+        }
+
+        .cms-right {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        .cms-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: clamp(0.6rem, 1vw, 1rem);
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: clamp(8px, 1vw, 12px);
+            padding: clamp(0.7rem, 1.2vw, 1.2rem);
+        }
+
+        .cms-feature-icon {
+            flex-shrink: 0;
+            width: clamp(28px, 2.5vw, 36px);
+            height: clamp(28px, 2.5vw, 36px);
+            background: var(--blue-wash);
+            border-radius: clamp(6px, 0.6vw, 8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue-mid);
+            padding: clamp(5px, 0.5vw, 7px);
+        }
+
+        .cms-feature-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .cms-feature-text {
+            flex: 1;
+        }
+
+        .cms-feature-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(0.75rem, 1vw, 0.95rem);
+            color: var(--text-primary);
+            margin-bottom: clamp(1px, 0.2vw, 3px);
+        }
+
+        .cms-feature-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ===========================================
+           SLIDE 11: CTA (dark)
+           =========================================== */
+        .cta-slide {
+            background: var(--bg-dark);
+        }
+
+        .cta-slide::after {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 50%, rgba(0, 112, 180, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: var(--slide-padding);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--title-size);
+            color: var(--white);
+            letter-spacing: -0.03em;
+            margin-bottom: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        .cta-content h2 span { color: var(--blue-light); }
+
+        .cta-subtitle {
+            font-size: var(--body-size);
+            color: rgba(255,255,255,0.65);
+            max-width: 40ch;
+            line-height: 1.65;
+            margin-bottom: clamp(1.5rem, 3vw, 3rem);
+        }
+
+        .cta-contact {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.5vw, 0.5rem);
+            align-items: center;
+        }
+
+        .cta-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--h3-size);
+            color: var(--white);
+        }
+
+        .cta-info {
+            font-size: var(--body-size);
+            color: rgba(255,255,255,0.6);
+        }
+
+        .cta-email {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: var(--body-size);
+            color: var(--blue-light);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(89, 165, 216, 0.3);
+            padding-bottom: 2px;
+            transition: border-color 0.3s ease;
+        }
+
+        .cta-email:hover {
+            border-color: var(--blue-light);
+        }
+
+        /* Geo circle on CTA */
+        .cta-circle {
+            position: absolute;
+            left: clamp(3rem, 8vw, 8rem);
+            top: 50%;
+            transform: translateY(-50%);
+            width: clamp(60px, 10vw, 140px);
+            height: clamp(60px, 10vw, 140px);
+            border: clamp(2px, 0.2vw, 3px) solid rgba(89, 165, 216, 0.15);
+            border-radius: 50%;
+        }
+
+        .cta-circle-2 {
+            position: absolute;
+            right: clamp(3rem, 8vw, 8rem);
+            bottom: clamp(3rem, 8vw, 8rem);
+            width: clamp(40px, 7vw, 100px);
+            height: clamp(40px, 7vw, 100px);
+            border: clamp(2px, 0.2vw, 3px) solid rgba(89, 165, 216, 0.1);
+            border-radius: 50%;
+        }
+
+        /* ===========================================
+           RESPONSIVE: Stack on narrow screens
+           =========================================== */
+        @media (max-width: 768px) {
+            .about-content,
+            .problem-content,
+            .solution-content,
+            .cms-content,
+            .persona-content {
+                flex-direction: column;
+                padding-left: var(--slide-padding);
+            }
+
+            .title-content {
+                padding-left: var(--slide-padding);
+            }
+
+            .geo-circle { display: none; }
+
+            .persona-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .persona-row-2 {
+                grid-template-columns: 1fr;
+                margin-left: 0;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .approach-steps {
+                flex-direction: column;
+            }
+
+            .change-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .change-content,
+            .features-content,
+            .approach-content,
+            .persona-content {
+                padding-left: var(--slide-padding);
+            }
+
+            .accent-bar { display: none; }
+        }
+
+        /* ===========================================
+           INLINE EDITING (opt-in)
+           =========================================== */
+        .edit-hotzone {
+            position: fixed;
+            top: 0; left: 0;
+            width: 80px; height: 80px;
+            z-index: 10000;
+            cursor: pointer;
+        }
+
+        .edit-toggle {
+            position: fixed;
+            top: clamp(0.5rem, 1vw, 1rem);
+            left: clamp(0.5rem, 1vw, 1rem);
+            background: var(--blue-dark);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10001;
+        }
+
+        .edit-toggle.show,
+        .edit-toggle.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .edit-toggle.active {
+            background: #d4433b;
+        }
+
+        [contenteditable="true"] {
+            outline: 2px dashed var(--blue-light);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        .edit-save-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--blue-dark);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10002;
+            pointer-events: none;
+        }
+
+        .edit-save-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation dots -->
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- Edit controls -->
+    <div class="edit-hotzone" id="editHotzone"></div>
+    <button class="edit-toggle" id="editToggle">Bearbeiten</button>
+    <div class="edit-save-toast" id="saveToast">Gespeichert!</div>
+
+    <!-- ===========================================
+         SLIDE 1: TITLE
+         =========================================== -->
+    <section class="slide title-slide grid-bg" data-theme="light">
+        <div class="accent-bar"></div>
+        <div class="title-content">
+            <div class="slide-label reveal">Webdesign-Vorschlag</div>
+            <h1 class="reveal">Die digitale <span>Tür</span> zur ICZ</h1>
+            <p class="subtitle reveal">Ein Website-Konzept, das Tradition mit Zukunft verbindet — von einem Gemeindemitglied, für die Gemeinde.</p>
+        </div>
+        <div class="slide-footer">
+            <span>Mindel Michel — Freelance Web & Graphic Designer</span>
+            <span>März 2026</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 2: DIE VISION
+         =========================================== -->
+    <section class="slide vision-slide dark-grid-bg" data-theme="dark">
+        <div class="quote-mark reveal">"</div>
+        <div class="vision-content">
+            <div class="slide-label slide-label-light reveal stagger-1">Die Vision</div>
+            <p class="vision-quote reveal stagger-2">«Ohne <em>Jugend</em> gibt es keine <em>Gemeinde</em> und keine <em>Zukunft.</em>»</p>
+            <p class="vision-attribution reveal stagger-3">— <strong>Noëmi van Gelder</strong>, Präsidentin ICZ</p>
+            <p class="vision-context reveal stagger-4">Die neue Präsidentin hat klare Prioritäten: Junge Erwachsene binden, Angebote schaffen die relevant, attraktiv und niederschwellig sind. Die Website ist ein wichtiger Berührungspunkt, vor allem für die jüngere Generation.</p>
+        </div>
+        <div class="slide-footer slide-footer-dark">
+            <span class="slide-number slide-number-light">02 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 3: ÜBER MICH
+         =========================================== -->
+    <section class="slide about-slide grid-bg" data-theme="light">
+        <div class="accent-bar"></div>
+        <div class="about-content">
+            <div class="about-left">
+                <div class="slide-label reveal stagger-1">Über mich</div>
+                <h2 class="reveal stagger-2">Aus der <span>Gemeinde</span>, für die Gemeinde.</h2>
+                <ul class="about-points">
+                    <li class="reveal stagger-3">30 Jahre alt, Gemeindemitglied seit Geburt</li>
+                    <li class="reveal stagger-4">Aufgewachsen im Hashomer Hatzair — jeden Samstag in der ICZ</li>
+                    <li class="reveal stagger-5">Mehrere Jahre in der Sicherheit ISO der Gemeinde tätig</li>
+                    <li class="reveal stagger-6">Freelance Web- und Grafikdesignerin mit Fokus auf nutzerzentriertes Design</li>
+                    <li class="reveal stagger-7">Ich kenne die Gemeinde — als Mitglied, als Nutzerin, als Gestalterin</li>
+                </ul>
+            </div>
+            <div class="about-right">
+                <div class="stat-card reveal stagger-4">
+                    <div class="stat-number">30</div>
+                    <div class="stat-label">Jahre Gemeindemitglied</div>
+                </div>
+                <div class="stat-card reveal stagger-5">
+                    <div class="stat-number">ICZ</div>
+                    <div class="stat-label">Jugend · Sicherheit · Leben</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-number">03 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 4: DAS PROBLEM
+         =========================================== -->
+    <section class="slide problem-slide grid-bg" data-theme="light">
+        <div class="accent-bar"></div>
+        <div class="problem-content">
+            <div class="problem-left">
+                <div class="slide-label reveal stagger-1" style="color: #d4433b;">Das Problem</div>
+                <h2 class="reveal stagger-2">Die aktuelle Website ist <span>veraltet</span> und <span>unübersichtlich.</span></h2>
+                <ul class="problem-items">
+                    <li class="reveal stagger-3">
+                        <span class="problem-icon">✕</span>
+                        <span>Veraltetes Design, das nicht den aktuellen Standards entspricht und die jüngere Generation nicht anspricht</span>
+                    </li>
+                    <li class="reveal stagger-4">
+                        <span class="problem-icon">✕</span>
+                        <span>Unübersichtliche Struktur — Informationen sind schwer zu finden, egal ob Event, Institution oder Kontakt</span>
+                    </li>
+                    <li class="reveal stagger-5">
+                        <span class="problem-icon">✕</span>
+                        <span>Keine klare Nutzerführung — jede Zielgruppe muss suchen statt zu finden</span>
+                    </li>
+                    <li class="reveal stagger-6">
+                        <span class="problem-icon">✕</span>
+                        <span>Nicht mobilfreundlich — über 60% der Nutzer besuchen Websites heute am Smartphone</span>
+                    </li>
+                    <li class="reveal stagger-7">
+                        <span class="problem-icon">✕</span>
+                        <span>Kein zeitgemässes Erlebnis — der erste Eindruck zählt, besonders für potenzielle Neumitglieder</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-number">04 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 5: PERSONAS (Speech Bubbles)
+         =========================================== -->
+    <section class="slide persona-slide grid-bg" data-theme="light">
+        <div class="accent-bar"></div>
+        <div class="persona-content">
+            <div class="persona-left">
+                <div class="slide-label reveal stagger-1">Zielgruppen</div>
+                <h2 class="reveal stagger-2">Wer nutzt die <span>Website?</span></h2>
+                <p class="persona-left-desc reveal stagger-3">Jede Zielgruppe stellt andere Fragen. Die Website muss für alle die richtige Antwort parat haben.</p>
+            </div>
+            <div class="persona-right">
+                <div class="persona-bubble reveal stagger-3">
+                    <span class="persona-tag tag-youth">Junge Erwachsene</span>
+                    <span class="persona-question">«Was läuft diesen Freitag? Gibt es einen Kabbalat Schabbat oder ein Community-Event?»</span>
+                </div>
+                <div class="persona-bubble reveal stagger-4">
+                    <span class="persona-tag tag-family">Eltern & Familien</span>
+                    <span class="persona-question">«Ab wann kann ich mein Kind in der Talmud-Tora-Schule anmelden?»</span>
+                </div>
+                <div class="persona-bubble reveal stagger-5">
+                    <span class="persona-tag tag-elder">Ältere Mitglieder</span>
+                    <span class="persona-question">«Wo finde ich das Seniorenturnen und die Angebote des Sozialressorts?»</span>
+                </div>
+                <div class="persona-bubble reveal stagger-6">
+                    <span class="persona-tag tag-religion">Religiöse Mitglieder</span>
+                    <span class="persona-question">«Steht dieses Produkt auf der Koscherliste? Wann ist der nächste Schiur?»</span>
+                </div>
+                <div class="persona-bubble reveal stagger-7">
+                    <span class="persona-tag tag-new">Potenzielle Neumitglieder</span>
+                    <span class="persona-question">«Was bietet die ICZ und wie kann ich Mitglied werden?»</span>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-number">05 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 6: WAS MUSS SICH ÄNDERN
+         =========================================== -->
+    <section class="slide change-slide grid-bg" data-theme="light">
+        <div class="accent-bar"></div>
+        <div class="change-content">
+            <div class="slide-label reveal stagger-1">Handlungsbedarf</div>
+            <h2 class="reveal stagger-2">Was muss sich <span>ändern?</span></h2>
+            <div class="change-grid">
+                <div class="change-card reveal stagger-3">
+                    <div class="change-card-title">Navigation</div>
+                    <div class="change-card-text">Die aktuelle Struktur ist nicht intuitiv. Nutzer brauchen klare Wege zu den Informationen, die sie suchen.</div>
+                </div>
+                <div class="change-card reveal stagger-4">
+                    <div class="change-card-title">Visuelle Hierarchie</div>
+                    <div class="change-card-text">Alles hat aktuell die gleiche Gewichtung. Wichtiges muss hervorgehoben werden, Orientierung muss leichter werden.</div>
+                </div>
+                <div class="change-card reveal stagger-5">
+                    <div class="change-card-title">Mobile Nutzung</div>
+                    <div class="change-card-text">Die Website muss auf jedem Gerät einwandfrei funktionieren — besonders auf dem Smartphone.</div>
+                </div>
+                <div class="change-card reveal stagger-6">
+                    <div class="change-card-title">Zeitgemässes Design</div>
+                    <div class="change-card-text">Ein modernes, warmes Erscheinungsbild, das die Identität der Gemeinde widerspiegelt und alle Generationen anspricht.</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-number">06 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 7: DIE LÖSUNG
+         =========================================== -->
+    <section class="slide solution-slide dark-grid-bg" data-theme="dark">
+        <div class="accent-bar"></div>
+        <div class="solution-content">
+            <div class="solution-left">
+                <div class="slide-label slide-label-light reveal stagger-1">Die Lösung</div>
+                <h2 class="reveal stagger-2">Eine Website, die <span>Tradition</span> und <span>Moderne</span> verbindet.</h2>
+                <p class="solution-desc reveal stagger-3">Eine nutzerzentrierte Website, die jedem Mitglied — egal welchen Alters — den Zugang zur Gemeinde erleichtert. Modern im Look, warm im Gefühl, einfach in der Nutzung.</p>
+            </div>
+            <div class="solution-right">
+                <div class="solution-pill reveal stagger-4">
+                    <div class="solution-pill-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                    <span class="solution-pill-text">Klare Nutzerführung für jede Zielgruppe</span>
+                </div>
+                <div class="solution-pill reveal stagger-5">
+                    <div class="solution-pill-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg></div>
+                    <span class="solution-pill-text">Responsive Design — überall nutzbar</span>
+                </div>
+                <div class="solution-pill reveal stagger-6">
+                    <div class="solution-pill-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                    <span class="solution-pill-text">Gemeinschaft sichtbar & erlebbar machen</span>
+                </div>
+                <div class="solution-pill reveal stagger-7">
+                    <div class="solution-pill-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                    <span class="solution-pill-text">Inhalte schnell und einfach finden</span>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer slide-footer-dark">
+            <span class="slide-number slide-number-light">07 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 8: SCHLÜSSELFUNKTIONEN
+         =========================================== -->
+    <section class="slide features-slide grid-bg" data-theme="light">
+        <div class="accent-bar"></div>
+        <div class="features-content">
+            <div class="slide-label reveal stagger-1">Was die neue Website bietet</div>
+            <h2 class="reveal stagger-2">Schlüssel&shy;funktionen</h2>
+            <div class="features-grid">
+                <div class="feature-card reveal stagger-3">
+                    <div class="feature-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                    <div class="feature-title">Event-Kalender</div>
+                    <div class="feature-desc">Alle Veranstaltungen übersichtlich, filterbar und mit Anmeldemöglichkeit</div>
+                </div>
+                <div class="feature-card reveal stagger-4">
+                    <div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
+                    <div class="feature-title">Intuitive Navigation</div>
+                    <div class="feature-desc">Klare Informationsarchitektur, die nach Nutzerbedürfnissen organisiert ist</div>
+                </div>
+                <div class="feature-card reveal stagger-5">
+                    <div class="feature-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg></div>
+                    <div class="feature-title">Responsive Design</div>
+                    <div class="feature-desc">Perfekte Darstellung auf jedem Gerät — Desktop, Tablet, Smartphone</div>
+                </div>
+                <div class="feature-card reveal stagger-6">
+                    <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                    <div class="feature-title">Community-Bereich</div>
+                    <div class="feature-desc">Raum für Familien&shy;nachrichten und Gemeinschafts&shy;gefühl</div>
+                </div>
+                <div class="feature-card reveal stagger-7">
+                    <div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                    <div class="feature-title">Schnelle Suche</div>
+                    <div class="feature-desc">Koscherliste, Institutionen, Kontakte — alles mit wenigen Klicks erreichbar</div>
+                </div>
+                <div class="feature-card reveal stagger-8">
+                    <div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                    <div class="feature-title">Mehrsprachigkeit</div>
+                    <div class="feature-desc">Deutsch und Englisch — für eine offene und zugängliche Gemeinde</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-number">08 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 9: MEIN ANSATZ
+         =========================================== -->
+    <section class="slide approach-slide grid-bg" data-theme="light">
+        <div class="approach-content">
+            <div class="slide-label reveal stagger-1">Wie ich arbeite</div>
+            <h2 class="reveal stagger-2">Mein <span>Ansatz</span></h2>
+            <div class="approach-steps">
+                <div class="approach-step reveal stagger-3">
+                    <div class="step-number">01</div>
+                    <div class="step-title">Verstehen</div>
+                    <div class="step-desc">Gespräche mit dem Vorstand, Mitgliedern und Nutzer:innen, um die Bedürfnisse aller Zielgruppen zu erfassen.</div>
+                </div>
+                <div class="approach-step reveal stagger-4">
+                    <div class="step-number">02</div>
+                    <div class="step-title">Konzipieren</div>
+                    <div class="step-desc">Informationsarchitektur, Wireframes und Prototypen — gemeinsam abgestimmt und iterativ verbessert.</div>
+                </div>
+                <div class="approach-step reveal stagger-5">
+                    <div class="step-number">03</div>
+                    <div class="step-title">Gestalten</div>
+                    <div class="step-desc">Visuelles Design, das die Identität der ICZ respektiert und gleichzeitig modern und einladend wirkt.</div>
+                </div>
+                <div class="approach-step reveal stagger-6">
+                    <div class="step-number">04</div>
+                    <div class="step-title">Umsetzen</div>
+                    <div class="step-desc">Technische Realisierung mit einem CMS, das von der Gemeinde eigenständig gepflegt werden kann.</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-number">09 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 10: EINFACH ZU PFLEGEN
+         =========================================== -->
+    <section class="slide cms-slide grid-bg" data-theme="light">
+        <div class="accent-bar"></div>
+        <div class="cms-content">
+            <div class="cms-left">
+                <div class="slide-label reveal stagger-1">Für Euch</div>
+                <h2 class="reveal stagger-2">Einfach zu <span>pflegen.</span></h2>
+                <p class="cms-desc reveal stagger-3">Die neue Website soll nicht nur gut aussehen — sie soll auch für euch einfach zu bedienen sein. Ohne Programmierkenntnisse, ohne externe Hilfe für jede Änderung.</p>
+            </div>
+            <div class="cms-right">
+                <div class="cms-feature reveal stagger-4">
+                    <div class="cms-feature-icon"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                    <div class="cms-feature-text">
+                        <div class="cms-feature-title">Inhalte selbst bearbeiten</div>
+                        <div class="cms-feature-desc">Events hinzufügen, Texte ändern, Bilder austauschen — alles über eine einfache Oberfläche.</div>
+                    </div>
+                </div>
+                <div class="cms-feature reveal stagger-5">
+                    <div class="cms-feature-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+                    <div class="cms-feature-text">
+                        <div class="cms-feature-title">Events & Agenda verwalten</div>
+                        <div class="cms-feature-desc">Neue Veranstaltungen mit wenigen Klicks erstellen und automatisch auf der Website anzeigen.</div>
+                    </div>
+                </div>
+                <div class="cms-feature reveal stagger-6">
+                    <div class="cms-feature-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                    <div class="cms-feature-text">
+                        <div class="cms-feature-title">Keine Programmierkenntnisse nötig</div>
+                        <div class="cms-feature-desc">Ein modernes CMS macht die Pflege so einfach wie das Schreiben einer E-Mail.</div>
+                    </div>
+                </div>
+                <div class="cms-feature reveal stagger-7">
+                    <div class="cms-feature-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <div class="cms-feature-text">
+                        <div class="cms-feature-title">Sicher & zuverlässig</div>
+                        <div class="cms-feature-desc">Automatische Backups, SSL-Verschlüsselung und regelmässige Updates für maximale Sicherheit.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-number">10 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 11: CTA
+         =========================================== -->
+    <section class="slide cta-slide dark-grid-bg" data-theme="dark">
+        <div class="cta-circle"></div>
+        <div class="cta-circle-2"></div>
+        <div class="cta-content">
+            <div class="slide-label slide-label-light reveal stagger-1">Nächste Schritte</div>
+            <h2 class="reveal stagger-2">Lass uns <span>sprechen.</span></h2>
+            <p class="cta-subtitle reveal stagger-3">Ich würde mich freuen, dieses Konzept persönlich vorzustellen und gemeinsam zu besprechen, wie die neue Website der ICZ aussehen könnte.</p>
+            <div class="cta-contact reveal stagger-4">
+                <div class="cta-name">Mindel Michel</div>
+                <div class="cta-info">Freelance Web & Graphic Designer · Zürich</div>
+                <a href="mailto:mindel.michel@gmail.com" class="cta-email">mindel.michel@gmail.com</a>
+            </div>
+        </div>
+        <div class="slide-footer slide-footer-dark">
+            <span class="slide-number slide-number-light">11 / 11</span>
+        </div>
+    </section>
+
+    <!-- ===========================================
+       JAVASCRIPT: Slide Controller + Inline Editing
+       =========================================== -->
+    <script>
+        /* === SLIDE PRESENTATION CONTROLLER === */
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.isAnimating = false;
+                this.cooldown = 800; /* ms between slide transitions */
+                this.setupIntersectionObserver();
+                this.setupWheelNav();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupProgressBar();
+                this.setupNavDots();
+                this.updateNavDotThemes();
+                /* Mark first slide visible immediately */
+                this.slides[0].classList.add('visible');
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const idx = Array.from(this.slides).indexOf(entry.target);
+                            if (idx !== -1) {
+                                this.currentSlide = idx;
+                                this.updateProgressBar();
+                                this.updateNavDots();
+                                this.updateNavDotThemes();
+                            }
+                        }
+                    });
+                }, { threshold: 0.4 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            setupWheelNav() {
+                /* Intercept wheel events and lock to one-slide-per-scroll */
+                document.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    if (this.isAnimating) return;
+
+                    if (e.deltaY > 0) {
+                        this.navigate(1);
+                    } else if (e.deltaY < 0) {
+                        this.navigate(-1);
+                    }
+                }, { passive: false });
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.getAttribute('contenteditable') === 'true') return;
+
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                        e.preventDefault();
+                        this.navigate(1);
+                    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        this.navigate(-1);
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        this.goToSlide(0);
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        this.goToSlide(this.slides.length - 1);
+                    }
+                });
+            }
+
+            setupTouchNav() {
+                let touchStartY = 0;
+                document.addEventListener('touchstart', (e) => {
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                document.addEventListener('touchend', (e) => {
+                    const diff = touchStartY - e.changedTouches[0].clientY;
+                    if (Math.abs(diff) > 50) {
+                        this.navigate(diff > 0 ? 1 : -1);
+                    }
+                }, { passive: true });
+            }
+
+            navigate(direction) {
+                if (this.isAnimating) return;
+                const next = this.currentSlide + direction;
+                if (next < 0 || next >= this.slides.length) return;
+                this.goToSlide(next);
+            }
+
+            goToSlide(index) {
+                if (index === this.currentSlide) return;
+                this.isAnimating = true;
+                this.currentSlide = index;
+                this.slides[index].scrollIntoView({ behavior: 'smooth' });
+                this.updateProgressBar();
+                this.updateNavDots();
+                this.updateNavDotThemes();
+                setTimeout(() => { this.isAnimating = false; }, this.cooldown);
+            }
+
+            setupProgressBar() {
+                this.progressBar = document.getElementById('progressBar');
+            }
+
+            updateProgressBar() {
+                const progress = ((this.currentSlide + 1) / this.slides.length) * 100;
+                this.progressBar.style.width = progress + '%';
+            }
+
+            setupNavDots() {
+                const nav = document.getElementById('navDots');
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', `Folie ${i + 1}`);
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    nav.appendChild(dot);
+                });
+                this.dots = nav.querySelectorAll('.nav-dot');
+            }
+
+            updateNavDots() {
+                this.dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+            }
+
+            updateNavDotThemes() {
+                const currentTheme = this.slides[this.currentSlide]?.dataset.theme;
+                this.dots.forEach(dot => {
+                    dot.classList.toggle('light', currentTheme === 'dark');
+                });
+            }
+        }
+
+        /* === INLINE EDITOR === */
+        class InlineEditor {
+            constructor() {
+                this.isActive = false;
+                this.editableElements = document.querySelectorAll(
+                    'h1, h2, p, li, .stat-number, .stat-label, .persona-tag, ' +
+                    '.persona-question, .change-card-title, .change-card-text, ' +
+                    '.feature-title, .feature-desc, .step-title, .step-desc, ' +
+                    '.cta-name, .cta-info, .vision-context, .subtitle, ' +
+                    '.solution-desc, .solution-pill-text, .cta-subtitle, ' +
+                    '.slide-label, .slide-label-light, .persona-left-desc, ' +
+                    '.cms-desc, .cms-feature-title, .cms-feature-desc'
+                );
+                this.setupControls();
+                this.setupKeyboardSave();
+            }
+
+            setupControls() {
+                const hotzone = document.getElementById('editHotzone');
+                const toggle = document.getElementById('editToggle');
+                let hideTimeout = null;
+
+                /* Hotzone hover with delay */
+                hotzone.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimeout);
+                    toggle.classList.add('show');
+                });
+                hotzone.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isActive) toggle.classList.remove('show');
+                    }, 400);
+                });
+                toggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+                toggle.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isActive) toggle.classList.remove('show');
+                    }, 400);
+                });
+
+                /* Click handlers */
+                toggle.addEventListener('click', () => this.toggleEditMode());
+                hotzone.addEventListener('click', () => this.toggleEditMode());
+
+                /* Keyboard shortcut */
+                document.addEventListener('keydown', (e) => {
+                    if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+                        this.toggleEditMode();
+                    }
+                });
+            }
+
+            toggleEditMode() {
+                this.isActive = !this.isActive;
+                const toggle = document.getElementById('editToggle');
+
+                if (this.isActive) {
+                    toggle.textContent = 'Fertig';
+                    toggle.classList.add('active', 'show');
+                    this.editableElements.forEach(el => el.setAttribute('contenteditable', 'true'));
+                } else {
+                    toggle.textContent = 'Bearbeiten';
+                    toggle.classList.remove('active');
+                    this.editableElements.forEach(el => el.removeAttribute('contenteditable'));
+                    this.showToast();
+                }
+            }
+
+            setupKeyboardSave() {
+                document.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        this.exportHTML();
+                    }
+                });
+            }
+
+            showToast() {
+                const toast = document.getElementById('saveToast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }
+
+            exportHTML() {
+                /* Remove contenteditable before export */
+                this.editableElements.forEach(el => el.removeAttribute('contenteditable'));
+                const html = document.documentElement.outerHTML;
+                this.editableElements.forEach(el => {
+                    if (this.isActive) el.setAttribute('contenteditable', 'true');
+                });
+
+                const blob = new Blob([html], { type: 'text/html' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'icz-pitch-deck.html';
+                a.click();
+                URL.revokeObjectURL(a.href);
+                this.showToast();
+            }
+        }
+
+        /* Initialize */
+        const presentation = new SlidePresentation();
+        const editor = new InlineEditor();
+    </script>
+</body>
+</html>
